@@ -1,0 +1,32 @@
+[package]
+name = "simulator"
+version.workspace = true
+edition = "2024"
+
+[dependencies]
+ble = { workspace = true }
+btuuid = { workspace = true }
+async-trait = "0.1"
+bytes = "1.11.0"
+deku = "0.20.2"
+rand = "0.8"
+hex = "0.4"
+libc = "0.2"
+anyhow = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true, features = ["std"] }
+libafl = { workspace = true }
+libafl_bolts = { workspace = true }
+libafl_targets = { workspace = true }
+clap = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+tokio = { workspace = true }
+tokio-util = { workspace = true }
+postcard = { workspace = true }
+nix = { workspace = true }
+phf = { version = "0.13.1", features = ["macros"] }
+spin = { workspace = true }
+aes = { workspace = true }
+cipher = { workspace = true }
+p256 = { version = "0.13", features = ["ecdh"] }

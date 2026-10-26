@@ -1,0 +1,307 @@
+memory_map:
+  rom:
+    base_addr: 0x00000000
+    size: 0x00080000
+    permissions: r-x
+    file: ./zephyr.bin
+    is_entry: true
+  ram:
+    base_addr: 0x20000000
+    size: 0x00100000
+    permissions: rw-
+  mmio:
+    base_addr: 0x40000000
+    size: 0x20000000
+    permissions: rw-
+  nvic:
+    base_addr: 0xE0000000
+    size: 0x10000000
+    permissions: rw-
+  irq_ret:
+    base_addr: 0xFFFFF000
+    size: 0x00001000
+    permissions: --x
+  mmio_id_1:
+    base_addr: 0x10000000
+    size: 0x00002000
+    permissions: rw-
+  mmio_id_2:
+    base_addr: 0xF0000000
+    size: 0x00001000
+    permissions: rw-
+
+handlers:
+  arch_early_memset_bridge:
+    addr: 0x0001e2db
+    handler: fuzzware_hooks_11.arch_early_memset_bridge
+    do_return: true
+  arch_early_memcpy_bridge:
+    addr: 0x0001e2df
+    handler: fuzzware_hooks_11.arch_early_memcpy_bridge
+    do_return: true
+  libc_memcpy_bridge:
+    addr: 0x00022d33
+    handler: fuzzware_hooks_11.libc_memcpy_bridge
+    do_return: true
+  libc_memset_bridge:
+    addr: 0x00022d83
+    handler: fuzzware_hooks_11.libc_memset_bridge
+    do_return: true
+  busy_wait_bridge:
+    addr: 0x0002095d
+    handler: fuzzware_hooks_11.busy_wait_bridge
+    do_return: true
+  arch_busy_wait_bridge:
+    addr: 0x000041b1
+    handler: fuzzware_hooks_11.busy_wait_bridge
+    do_return: true
+  printk_noop_bridge:
+    addr: 0x0001d859
+    handler: fuzzware_hooks_11.noop_bridge
+    do_return: true
+  uarte_poll_out_noop_bridge:
+    addr: 0x00018b6d
+    handler: fuzzware_hooks_11.noop_bridge
+    do_return: true
+  controller_init_reset_bridge:
+    addr: 0x0000d2fc
+    handler: fuzzware_hooks_11.ret0_bridge
+    do_return: true
+  controller_rx_replenish_bridge:
+    addr: 0x0000d204
+    handler: fuzzware_hooks_11.ret0_bridge
+    do_return: true
+  hci_driver_send_bridge:
+    addr: 0x0000e001
+    handler: fuzzware_hooks_11.hci_driver_send_bridge
+    do_return: false
+  bt_hci_recv_bridge:
+    addr: 0x00004815
+    handler: fuzzware_hooks_11.bt_hci_recv_bridge
+    do_return: false
+  bt_hci_recv_bridge_even:
+    addr: 0x00004814
+    handler: fuzzware_hooks_11.bt_hci_recv_bridge
+    do_return: false
+  bt_recv_prio_bridge:
+    addr: 0x0000dfe1
+    handler: fuzzware_hooks_11.bt_recv_prio_bridge
+    do_return: false
+  bt_le_adv_start_probe:
+    addr: 0x000063f0
+    handler: fuzzware_hooks_11.pc_probe
+    do_return: false
+  entropy_get_probe:
+    addr: 0x0001883d
+    handler: fuzzware_hooks_11.entropy_get_bridge
+    do_return: true
+  entropy_get_isr_probe:
+    addr: 0x00018795
+    handler: fuzzware_hooks_11.entropy_get_bridge
+    do_return: true
+
+limits:
+  translation_blocks: 3000000
+  fuzz_consumption_timeout: 5000000
+  interrupts: 10000
+
+mmio_models:
+  bitextract:
+    pc_000185ee_mmio_40000418:
+      access_size: 0x4
+      addr: 0x40000418
+      left_shift: 0x0
+      mask: 0x1ffff
+      pc: 0x185ee
+      size: 0x3
+    pc_0001971e_mmio_4000041c:
+      access_size: 0x4
+      addr: 0x4000041c
+      left_shift: 0x0
+      mask: 0x3
+      pc: 0x1971e
+      size: 0x1
+  constant:
+    pc_000188ce_mmio_4000d504:
+      access_size: 0x4
+      addr: 0x4000d504
+      pc: 0x188ce
+      val: 0x1
+    pc_000188e0_mmio_4000d100:
+      access_size: 0x4
+      addr: 0x4000d100
+      pc: 0x188e0
+      val: 0x0
+    pc_00018ade_mmio_50000714:
+      access_size: 0x4
+      addr: 0x50000714
+      pc: 0x18ade
+      val: 0x0
+    pc_00018ade_mmio_50000718:
+      access_size: 0x4
+      addr: 0x50000718
+      pc: 0x18ade
+      val: 0x0
+    pc_00018ade_mmio_50000720:
+      access_size: 0x4
+      addr: 0x50000720
+      pc: 0x18ade
+      val: 0x0
+    pc_00018caa_mmio_40002158:
+      access_size: 0x4
+      addr: 0x40002158
+      pc: 0x18caa
+      val: 0x1
+    pc_00018cdc_mmio_40002110:
+      access_size: 0x4
+      addr: 0x40002110
+      pc: 0x18cdc
+      val: 0x0
+    pc_000191e4_mmio_f0000fe0:
+      access_size: 0x1
+      addr: 0xf0000fe0
+      pc: 0x191e4
+      val: 0x6
+    pc_000191ec_mmio_f0000fe8:
+      access_size: 0x4
+      addr: 0xf0000fe8
+      pc: 0x191ec
+      val: 0x40
+    pc_000192b8_mmio_10000130:
+      access_size: 0x4
+      addr: 0x10000130
+      pc: 0x192b8
+      val: 0x6
+    pc_000192c4_mmio_10000134:
+      access_size: 0x4
+      addr: 0x10000134
+      pc: 0x192c4
+      val: 0x4
+    pc_000193ae_mmio_10000130:
+      access_size: 0x4
+      addr: 0x10000130
+      pc: 0x193ae
+      val: 0x6
+    pc_00019544_mmio_10000130:
+      access_size: 0x4
+      addr: 0x10000130
+      pc: 0x19544
+      val: 0x6
+    pc_00019550_mmio_10000134:
+      access_size: 0x4
+      addr: 0x10000134
+      pc: 0x19550
+      val: 0x4
+    pc_0002092e_mmio_40011144:
+      access_size: 0x4
+      addr: 0x40011144
+      pc: 0x2092e
+      val: 0x0
+    pc_0002093e_mmio_10000130:
+      access_size: 0x4
+      addr: 0x10000130
+      pc: 0x2093e
+      val: 0x6
+    pc_00020ea0_mmio_4000617c:
+      access_size: 0x4
+      addr: 0x4000617c
+      pc: 0x20ea0
+      val: 0x0
+  passthrough:
+    pc_00018ade_mmio_5000071c:
+      access_size: 0x4
+      addr: 0x5000071c
+      init_val: 0x0
+      pc: 0x18ade
+    pc_00019226_mmio_10000324:
+      access_size: 0x4
+      addr: 0x10000324
+      init_val: 0x0
+      pc: 0x19226
+    pc_0001924c_mmio_10000244:
+      access_size: 0x4
+      addr: 0x10000244
+      init_val: 0x0
+      pc: 0x1924c
+    pc_00019384_mmio_10000258:
+      access_size: 0x4
+      addr: 0x10000258
+      init_val: 0x0
+      pc: 0x19384
+    pc_0001939a_mmio_40000400:
+      access_size: 0x4
+      addr: 0x40000400
+      init_val: 0x0
+      pc: 0x1939a
+    pc_000193c8_mmio_4000173c:
+      access_size: 0x4
+      addr: 0x4000173c
+      init_val: 0x0
+      pc: 0x193c8
+  set:
+    pc_0001862e_mmio_40000518:
+      access_size: 0x4
+      addr: 0x40000518
+      pc: 0x1862e
+      vals:
+      - 0x0
+      - 0x1
+    pc_00018636_mmio_40000104:
+      access_size: 0x4
+      addr: 0x40000104
+      pc: 0x18636
+      vals:
+      - 0x0
+      - 0x1
+    pc_0001907a_mmio_40011304:
+      access_size: 0x4
+      addr: 0x40011304
+      pc: 0x1907a
+      vals:
+      - 0x0
+      - 0x10000
+    pc_0001908c_mmio_40011140:
+      access_size: 0x4
+      addr: 0x40011140
+      pc: 0x1908c
+      vals:
+      - 0x0
+      - 0x1
+    pc_00019408_mmio_10001200:
+      access_size: 0x4
+      addr: 0x10001200
+      pc: 0x19408
+      vals:
+      - 0x0
+      - 0x15
+    pc_00019410_mmio_10001204:
+      access_size: 0x4
+      addr: 0x10001204
+      pc: 0x19410
+      vals:
+      - 0x0
+      - 0x15
+    pc_00019716_mmio_40000414:
+      access_size: 0x4
+      addr: 0x40000414
+      pc: 0x19716
+      vals:
+      - 0x0
+      - 0x1
+  unmodeled:
+    pc_000176aa_mmio_4000b504:
+      access_size: 0x4
+      addr: 0x4000b504
+      pc: 0x176aa
+    pc_00018e20_mmio_40011504:
+      access_size: 0x4
+      addr: 0x40011504
+      pc: 0x18e20
+    pc_000190e8_mmio_40011144:
+      access_size: 0x4
+      addr: 0x40011144
+      pc: 0x190e8
+    pc_000196c4_mmio_40000104:
+      access_size: 0x4
+      addr: 0x40000104
+      pc: 0x196c4

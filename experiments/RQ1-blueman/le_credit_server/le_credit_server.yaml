@@ -1,0 +1,25 @@
+fuzzer:
+  work_dir: "./fuzz"
+
+simulator:
+  transport: "zephyr_ipc@sim=trial_sim,dev=0,phy=HCIIPC,mode=hci_ipc"
+  protocol: "h4"
+  timeout: 3000
+  initial_timeout: 3000
+  round_timeout: 0
+  max_acl_packets_per_round: 256
+  le_credit:
+    enabled: true
+    auto_open_as_client: true
+    auto_stream_after_open: true
+    stream_payload_len: 1000
+    stream_packets_per_burst: 12
+    initial_credits: 32
+
+executor:
+  target_path: "./target.exe"
+  cmd_args: ["-v=0", "-nosim", "-s=trial_sim", "-d=0"]
+  auto_append_sim_args: false
+  run_timeout_ms: 2500
+  env: {}
+  allow_nonzero_exit: false

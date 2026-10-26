@@ -1,0 +1,18 @@
+.git
+.gitignore
+# Rust build outputs (do NOT exclude QEMU's source target/ directory)
+/target
+/apps/*/target
+/apps/*/target-*
+/deps/libafl/target
+/deps/qemu-libafl-bridge/build
+/deps/qemu-libafl-bridge/build.backup.*
+# Runtime output
+outputs
+**/fuzz-*
+**/telemetry
+**/__pycache__
+**/*.pyc
+**/*.log
+**/*.pcap
+docs/*.pdf

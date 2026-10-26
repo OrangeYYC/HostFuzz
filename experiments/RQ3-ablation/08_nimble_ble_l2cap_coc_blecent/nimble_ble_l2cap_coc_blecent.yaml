@@ -1,0 +1,68 @@
+fuzzer:
+  work_dir: "./fuzz"
+
+simulator:
+  transport: "udp-sync@127.0.0.1:6667-127.0.0.1:6666"
+  protocol: "h4"
+  timeout: 2500
+  initial_timeout: 60000
+  legacy_scan_reports:
+  - data:
+    - 0x02
+    - 0x01
+    - 0x06
+    - 0x03
+    - 0x03
+    - 0x12
+    - 0x18
+  le_credit:
+    enabled: true
+    psm: 0x1002
+    mtu: 512
+    mps: 247
+    initial_credits: 32
+    auto_open_as_client: false
+    auto_stream_after_open: false
+    stream_payload_len: 128
+    stream_packets_per_burst: 2
+    suppress_att_interact: true
+    semantic_probe_actions_per_trigger: 3
+    semantic_probe_sequence:
+    - credit_overrun
+    - oversized_fragment
+    - valid_mtu_sdu
+    - credit_refill_burst
+    - oversized_sdu
+    - valid_small_sdu
+
+executor:
+  flash_path: "./nimble_ble_l2cap_coc_blecent.bin"
+  efuse_path: "../common/efuse.bin"
+  pc_bios_path: "../common"
+  hooks:
+    controller:
+      esp_bt_controller_init: 0x400e6a20
+      esp_bt_controller_enable: 0x400e6be8
+      esp_bt_controller_get_status: 0x0
+      esp_bt_controller_mem_release: 0x400e69dc
+      esp_ble_tx_power_get: 0x0
+      esp_vhci_host_register_callback: 0x400e69cc
+      esp_vhci_host_check_send_available: 0x400e69a4
+      esp_vhci_host_send_packet: 0x400e69b0
+    sanitizer:
+      malloc_enter: 0x4008f5a4
+      malloc_return: 0x4008f5ae
+      pv_port_malloc_enter: 0x400d467c
+      pv_port_malloc_return: 0x400d468b
+      free_enter: 0x4008f5b0
+      v_port_free_enter: 0x400d4690
+      calloc_enter: 0x4008f5bc
+      calloc_return: 0x4008f5e6
+      panic_handler: 0x400817ac
+      esp_panic_handler: 0x40116204
+      # Disabled for the ablation comparison: full-mode reverse-CoC bootstrap
+      # deterministically hits an invalid read in ble_l2cap_sig_coc_req_rx
+      # before the corpus is seeded. Empty heap/code regions make
+      # HeapSanitizer::is_interested() always false for this case.
+      heap_area: []
+      code_area: []

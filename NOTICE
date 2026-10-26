@@ -1,0 +1,30 @@
+HostFuzz
+========
+
+HostFuzz is the artifact for the paper "HostFuzz: A Framework for Scalable BLE
+Host Fuzzing via HCI Interaction" (NDSS 2027).
+
+The original HostFuzz code in `crates/` and `apps/` is released under the
+MIT OR Apache-2.0 license (see LICENSE-MIT and LICENSE-APACHE).
+
+This repository vendors third-party components:
+
+- `deps/libafl` — LibAFL, MIT OR Apache-2.0.
+  Upstream: https://github.com/AFLplusplus/LibAFL
+- `deps/qemu-libafl-bridge` — QEMU with the LibAFL bridge, GPL-2.0.
+  Upstream: https://github.com/AFLplusplus/qemu-libafl-bridge
+  The GPL-2.0 license text is in `deps/qemu-libafl-bridge/COPYING`
+  (and `COPYING.LIB` for the library parts). Because the fuzzer binaries
+  statically link this QEMU-derived code, redistributed binaries built from
+  this tree are subject to GPL-2.0. The complete corresponding source is
+  included in this repository.
+- Fuzzware (installed by `Dockerfile --target full`) — BSD-3-Clause.
+  Upstream: https://github.com/fuzzware-fuzzer/fuzzware
+- Demo firmware/application binaries are built from open-source BLE stacks:
+  BlueKitchen BTstack (Apache-2.0), Zephyr (Apache-2.0), Apache NimBLE
+  (Apache-2.0), and ESP-IDF BlueDroid (Apache-2.0). Their source code is not
+  vendored here; the binaries are included only as fuzzing targets.
+
+Security-testing inputs and detailed vulnerability reports for findings that
+were still under coordinated disclosure at submission time are intentionally
+not part of this artifact.

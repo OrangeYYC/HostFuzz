@@ -1,0 +1,20 @@
+[package]
+name = "ble"
+version.workspace = true
+edition = "2024"
+
+[features]
+default = []
+fuzzware_input = ["dep:rand"]
+
+[dependencies]
+deku = "0.20.2"
+btuuid = {workspace = true }
+num_enum = { workspace = true }
+tracing = { workspace = true }
+anyhow = { workspace = true }
+serde = { workspace = true }
+hex = { workspace = true }
+libafl = { workspace = true }
+libafl_bolts = { workspace = true }
+rand = { version = "0.8", optional = true }

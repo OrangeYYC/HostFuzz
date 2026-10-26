@@ -1,0 +1,56 @@
+# HostFuzz demo case: ESP-IDF BlueDroid GATT client (ESP32, system-mode QEMU)
+# Paper mapping: RQ1 (fuzzing effectiveness; BLuEMan's original ESP32 case).
+fuzzer:
+  work_dir: "./fuzz"
+
+simulator:
+  transport: "udp-sync@127.0.0.1:6667-127.0.0.1:6666"
+  protocol: "h4"
+  timeout: 2500
+  initial_timeout: 60000
+  max_att_profile_guided_probe_steps: 12
+  supported_states: [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+  legacy_scan_reports:
+    - event_type: 0x00
+      address_type: "Public"
+      address: [0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6]
+      data: [0x02, 0x01, 0x06, 0x0F, 0x09, 0x45, 0x53, 0x50, 0x5F, 0x47, 0x41, 0x54, 0x54, 0x53, 0x5F, 0x44, 0x45, 0x4D, 0x4F]
+      rssi: -46
+  ablation:
+    record_telemetry: true
+    telemetry_dir: "./telemetry"
+
+executor:
+  flash_path: "./qemu_flash.bin"
+  efuse_path: "../common/efuse.bin"
+  pc_bios_path: "../common"
+  hooks:
+    controller:
+      esp_bt_controller_init: 0x400DBB44
+      esp_bt_controller_enable: 0x400DBCD8
+      esp_bt_controller_get_status: 0x400DBD5C
+      esp_bt_controller_mem_release: 0x400DBB00
+      esp_ble_tx_power_get: 0x400DBD68
+      esp_vhci_host_register_callback: 0x400DBAF0
+      esp_vhci_host_check_send_available: 0x400DBAC8
+      esp_vhci_host_send_packet: 0x400DBAD4
+    sanitizer:
+      malloc_enter: 0x4008F458
+      malloc_return: 0x4008F462
+      pv_port_malloc_enter: 0x400D5680
+      pv_port_malloc_return: 0x400D568F
+      free_enter: 0x4008F464
+      v_port_free_enter: 0x400D5694
+      calloc_enter: 0x4008F470
+      calloc_return: 0x4008F49A
+      panic_handler: 0x4008177C
+      esp_panic_handler: 0x40132354
+      heap_area:
+        - [0x3FFAFF10, 0x000000F0]
+        - [0x3FFB6388, 0x00001C78]
+        - [0x3FFB9A20, 0x00004108]
+        - [0x3FFC6D38, 0x000192C8]
+        - [0x3FFE0440, 0x00003AE0]
+        - [0x3FFE4350, 0x0001BCB0]
+        - [0x40097800, 0x00008800]
+      code_area: []

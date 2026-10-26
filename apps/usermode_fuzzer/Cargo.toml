@@ -1,0 +1,36 @@
+[package]
+name = "usermode_fuzzer"
+version = "0.1.0"
+edition = "2024"
+
+[features]
+default = []
+
+x86_64 = ["libafl_qemu/x86_64", "libafl_qemu/asan_guest"]
+i386 = ["libafl_qemu/i386", "libafl_qemu/asan_guest"]
+arm = ["libafl_qemu/arm", "libafl_qemu/asan_guest"]
+aarch64 = ["libafl_qemu/aarch64", "libafl_qemu/asan_guest"]
+mips = ["libafl_qemu/mips", "libafl_qemu/asan_guest"]
+ppc = ["libafl_qemu/ppc", "libafl_qemu/asan_guest"]
+riscv32 = ["libafl_qemu/riscv32", "libafl_qemu/asan_guest"]
+riscv64 = ["libafl_qemu/riscv64", "libafl_qemu/asan_guest"]
+xtensa = ["libafl_qemu/xtensa", "libafl_qemu/asan_guest"]
+be = ["libafl_qemu/be"]
+
+[dependencies]
+hex = "0.4"
+libc = "0.2.178"
+serde = { version = "1.0.228" }
+serde_yaml = { version = "0.9.34" }
+tracing = "0.1.41"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt", "registry", "std"] }
+clap = { version = "4.5.52", features = ["derive"] }
+ble = { path = "../../crates/ble" }
+fuzzer = { path = "../../crates/fuzzer" }
+simulator = { path = "../../crates/simulator" }
+libafl = { path = "../../deps/libafl/crates/libafl" }
+libafl_bolts = { path = "../../deps/libafl/crates/libafl_bolts" }
+libafl_qemu = { path = "../../deps/libafl/crates/libafl_qemu", default-features = false, features = ["usermode"] }
+
+[workspace]
+members = ["."]

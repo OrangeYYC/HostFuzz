@@ -1,0 +1,5 @@
+libpng-*
+fuzzer
+fuzzbench
+coverage_dump
+seeds_dump

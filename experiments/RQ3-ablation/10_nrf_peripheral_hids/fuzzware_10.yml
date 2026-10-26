@@ -1,0 +1,662 @@
+memory_map:
+  rom:
+    base_addr: 0x00000000
+    size: 0x00080000
+    permissions: r-x
+    file: ./zephyr.bin
+    is_entry: true
+  ram:
+    base_addr: 0x20000000
+    size: 0x00100000
+    permissions: rw-
+  mmio:
+    base_addr: 0x40000000
+    size: 0x20000000
+    permissions: rw-
+  nvic:
+    base_addr: 0xE0000000
+    size: 0x10000000
+    permissions: rw-
+  irq_ret:
+    base_addr: 0xFFFFF000
+    size: 0x00001000
+    permissions: --x
+  mmio_id_1:
+    base_addr: 0x10000000
+    size: 0x00002000
+    permissions: rw-
+  mmio_id_2:
+    base_addr: 0xF0000000
+    size: 0x00001000
+    permissions: rw-
+
+handlers:
+  arch_early_memset_bridge:
+    addr: 0x00020e37
+    handler: fuzzware_hooks_10.arch_early_memset_bridge
+    do_return: true
+  arch_early_memcpy_bridge:
+    addr: 0x00020e3b
+    handler: fuzzware_hooks_10.arch_early_memcpy_bridge
+    do_return: true
+  libc_memcpy_bridge:
+    addr: 0x00025bef
+    handler: fuzzware_hooks_10.libc_memcpy_bridge
+    do_return: true
+  libc_memset_bridge:
+    addr: 0x00025c3f
+    handler: fuzzware_hooks_10.libc_memset_bridge
+    do_return: true
+  busy_wait_bridge:
+    addr: 0x000237ef
+    handler: fuzzware_hooks_10.busy_wait_bridge
+    do_return: true
+  arch_busy_wait_bridge:
+    addr: 0x00005005
+    handler: fuzzware_hooks_10.busy_wait_bridge
+    do_return: true
+  printk_noop_bridge:
+    addr: 0x0001fb93
+    handler: fuzzware_hooks_10.noop_bridge
+    do_return: true
+  uarte_poll_out_noop_bridge:
+    addr: 0x0001ad01
+    handler: fuzzware_hooks_10.noop_bridge
+    do_return: true
+  bt_settings_init_bridge:
+    addr: 0x00005231
+    handler: fuzzware_hooks_10.ret0_bridge
+    do_return: true
+  settings_load_bridge:
+    addr: 0x00020c1f
+    handler: fuzzware_hooks_10.ret0_bridge
+    do_return: true
+  controller_init_reset_bridge:
+    addr: 0x0000f08c
+    handler: fuzzware_hooks_10.ret0_bridge
+    do_return: true
+  controller_rx_replenish_bridge:
+    addr: 0x0000ef94
+    handler: fuzzware_hooks_10.ret0_bridge
+    do_return: true
+  valid_adv_param_bridge:
+    addr: 0x00007431
+    handler: fuzzware_hooks_10.ret1_bridge
+    do_return: true
+  valid_adv_param_bridge_even:
+    addr: 0x00007430
+    handler: fuzzware_hooks_10.ret1_bridge
+    do_return: true
+  bt_hci_cmd_send_sync_bridge:
+    addr: 0x00006410
+    handler: fuzzware_hooks_10.bt_hci_cmd_send_sync_bridge
+    do_return: false
+  bt_hci_cmd_send_sync_after_send_probe:
+    addr: 0x00006474
+    handler: fuzzware_hooks_10.cmd_sync_probe
+    do_return: false
+  bt_hci_cmd_send_sync_after_ksem_probe:
+    addr: 0x0000648c
+    handler: fuzzware_hooks_10.cmd_sync_probe
+    do_return: false
+  bt_hci_cmd_send_sync_ret_probe:
+    addr: 0x00006434
+    handler: fuzzware_hooks_10.cmd_sync_probe
+    do_return: false
+  hci_driver_send_bridge:
+    addr: 0x0000fdc1
+    handler: fuzzware_hooks_10.hci_driver_send_bridge
+    do_return: false
+  hci_send_post_cmd_handle_probe:
+    addr: 0x0000fe20
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  hci_cmd_handle_bridge:
+    addr: 0x0000fe1d
+    handler: fuzzware_hooks_10.hci_cmd_handle_bridge
+    do_return: false
+  hci_cmd_handle_bridge_even:
+    addr: 0x0000fe1c
+    handler: fuzzware_hooks_10.hci_cmd_handle_bridge
+    do_return: false
+  hci_cmd_handle_fn_bridge:
+    addr: 0x0001036d
+    handler: fuzzware_hooks_10.hci_cmd_handle_fn_bridge
+    do_return: false
+  hci_cmd_handle_fn_bridge_even:
+    addr: 0x0001036c
+    handler: fuzzware_hooks_10.hci_cmd_handle_fn_bridge
+    do_return: false
+  hci_send_bt_recv_prio_call_probe:
+    addr: 0x0000fe28
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  hci_send_unref_probe:
+    addr: 0x0000fe08
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_hci_recv_bridge:
+    addr: 0x000059b9
+    handler: fuzzware_hooks_10.bt_hci_recv_bridge
+    do_return: false
+  bt_hci_recv_bridge_even:
+    addr: 0x000059b8
+    handler: fuzzware_hooks_10.bt_hci_recv_bridge
+    do_return: false
+  bt_hci_recv_after_entry_probe:
+    addr: 0x000059bd
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_hci_recv_after_entry_probe_even:
+    addr: 0x000059bc
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_recv_prio_bridge:
+    addr: 0x0000fda1
+    handler: fuzzware_hooks_10.bt_recv_prio_bridge
+    do_return: false
+  handle_event_probe:
+    addr: 0x000213cd
+    handler: fuzzware_hooks_10.hci_buf_r1_probe
+    do_return: false
+  handle_event_probe_even:
+    addr: 0x000213cc
+    handler: fuzzware_hooks_10.hci_buf_r1_probe
+    do_return: false
+  hci_cmd_complete_probe:
+    addr: 0x00006a95
+    handler: fuzzware_hooks_10.hci_buf_r0_probe
+    do_return: false
+  hci_cmd_complete_probe_even:
+    addr: 0x00006a94
+    handler: fuzzware_hooks_10.hci_buf_r0_probe
+    do_return: false
+  hci_cmd_status_probe:
+    addr: 0x00006a61
+    handler: fuzzware_hooks_10.hci_buf_r0_probe
+    do_return: false
+  hci_cmd_status_probe_even:
+    addr: 0x00006a60
+    handler: fuzzware_hooks_10.hci_buf_r0_probe
+    do_return: false
+  hci_le_meta_prio_event_probe:
+    addr: 0x00005ae5
+    handler: fuzzware_hooks_10.hci_buf_r0_probe
+    do_return: false
+  hci_le_meta_prio_event_probe_even:
+    addr: 0x00005ae4
+    handler: fuzzware_hooks_10.hci_buf_r0_probe
+    do_return: false
+  rx_work_handler_probe:
+    addr: 0x00005b05
+    handler: fuzzware_hooks_10.hci_buf_r0_probe
+    do_return: false
+  rx_work_handler_probe_even:
+    addr: 0x00005b04
+    handler: fuzzware_hooks_10.hci_buf_r0_probe
+    do_return: false
+  bt_hci_evt_get_flags_probe:
+    addr: 0x0002130d
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_hci_evt_get_flags_probe_even:
+    addr: 0x0002130c
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_hci_recv_prio_path_probe:
+    addr: 0x00005a2f
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_hci_recv_prio_path_probe_even:
+    addr: 0x00005a2e
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_hci_recv_handle_event_probe:
+    addr: 0x00005a8f
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_hci_recv_handle_event_probe_even:
+    addr: 0x00005a8e
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_hci_recv_post_path_probe:
+    addr: 0x00005aad
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_hci_recv_post_path_probe_even:
+    addr: 0x00005aac
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_hci_recv_queue_path_probe:
+    addr: 0x00005ab1
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_hci_recv_queue_path_probe_even:
+    addr: 0x00005ab0
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  k_sem_give_probe:
+    addr: 0x0001ddf1
+    handler: fuzzware_hooks_10.k_sem_probe
+    do_return: false
+  k_sem_give_probe_even:
+    addr: 0x0001ddf0
+    handler: fuzzware_hooks_10.k_sem_probe
+    do_return: false
+  hci_cmd_done_probe:
+    addr: 0x00005cc1
+    handler: fuzzware_hooks_10.hci_cmd_done_probe
+    do_return: false
+  hci_cmd_done_probe_even:
+    addr: 0x00005cc0
+    handler: fuzzware_hooks_10.hci_cmd_done_probe
+    do_return: false
+  bt_ready_probe:
+    addr: 0x00001e99
+    handler: fuzzware_hooks_10.bt_ready_state_fix_bridge
+    do_return: false
+  bt_ready_probe_even:
+    addr: 0x00001e98
+    handler: fuzzware_hooks_10.bt_ready_state_fix_bridge
+    do_return: false
+  bt_ready_after_adv_start_probe:
+    addr: 0x00001ed6
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_ready_after_adv_start_probe_odd:
+    addr: 0x00001ed7
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  settings_load_probe:
+    addr: 0x00020c1f
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  settings_load_probe_even:
+    addr: 0x00020c1e
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_le_adv_start_probe:
+    addr: 0x0000758d
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_le_adv_start_probe_even:
+    addr: 0x0000758c
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_after_set_event_mask_probe:
+    addr: 0x00000740
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_after_set_event_mask_probe_even:
+    addr: 0x0000073f
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_vs_read_version_probe:
+    addr: 0x0000074c
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_vs_read_version_ret_probe:
+    addr: 0x00000754
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_vs_read_version_err_probe:
+    addr: 0x00000756
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_vs_read_version_probe_even:
+    addr: 0x0000074b
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_vs_read_version_probe_odd:
+    addr: 0x0000074d
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_vs_read_version_probe_tail:
+    addr: 0x0000074e
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_vs_read_version_probe_tail_odd:
+    addr: 0x0000074f
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_pre_vs_probe:
+    addr: 0x00000748
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_pre_vs_probe_odd:
+    addr: 0x00000749
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_error_return_probe:
+    addr: 0x000004b8
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_error_return_probe_odd:
+    addr: 0x000004b9
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_after_read_version_call_probe:
+    addr: 0x0000043c
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_after_read_version_call_probe_odd:
+    addr: 0x0000043d
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_after_read_version_branch_probe:
+    addr: 0x00000440
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_after_read_version_branch_probe_odd:
+    addr: 0x00000441
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_before_read_supported_cmds_probe:
+    addr: 0x00000470
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_before_read_supported_cmds_probe_odd:
+    addr: 0x00000471
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_read_supported_cmds_call_probe:
+    addr: 0x00000474
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_read_supported_cmds_call_probe_odd:
+    addr: 0x00000475
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_after_read_supported_cmds_probe:
+    addr: 0x00000478
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_after_read_supported_cmds_probe_odd:
+    addr: 0x00000479
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_after_bt_id_init_probe:
+    addr: 0x00000764
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_after_bt_id_init_probe_odd:
+    addr: 0x00000765
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_after_bt_conn_init_probe:
+    addr: 0x00000770
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_after_bt_conn_init_probe_odd:
+    addr: 0x00000771
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_after_bt_init_part0_probe:
+    addr: 0x0000077c
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_after_bt_init_part0_probe_odd:
+    addr: 0x0000077d
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_post_202a_alloc_probe:
+    addr: 0x0000062e
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_after_202a_send_sync_probe:
+    addr: 0x0000060a
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_after_202a_branch_probe:
+    addr: 0x0000060c
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_after_202a_ret_probe:
+    addr: 0x00000608
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_after_202a_continue_probe:
+    addr: 0x00000610
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_before_cmd_alloc_probe:
+    addr: 0x0000061e
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_after_cmd_alloc_probe:
+    addr: 0x0000062a
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_fill_event_mask_probe:
+    addr: 0x00000630
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_after_add_event_mask_probe:
+    addr: 0x00000638
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_before_send_le_set_event_mask_probe:
+    addr: 0x0000067c
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_after_put_le64_probe:
+    addr: 0x0000067a
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_prepare_le_set_event_mask_probe:
+    addr: 0x0000067e
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_post_202a_alloc_fail_probe:
+    addr: 0x000006e0
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_post_202a_alloc_ok_probe:
+    addr: 0x00000718
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_send_le_set_event_mask_probe:
+    addr: 0x00000682
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_after_le_set_event_mask_probe:
+    addr: 0x0000068e
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  bt_init_second_alloc_probe:
+    addr: 0x000006de
+    handler: fuzzware_hooks_10.pc_probe
+    do_return: false
+  entropy_get_probe:
+    addr: 0x0001a7a1
+    handler: fuzzware_hooks_10.entropy_get_bridge
+    do_return: true
+  entropy_get_isr_probe:
+    addr: 0x0001a6f9
+    handler: fuzzware_hooks_10.entropy_get_bridge
+    do_return: true
+
+limits:
+  translation_blocks: 3000000
+  fuzz_consumption_timeout: 5000000
+  interrupts: 10000
+
+mmio_models:
+  bitextract:
+    pc_0001a552_mmio_40000418:
+      access_size: 0x4
+      addr: 0x40000418
+      left_shift: 0x0
+      mask: 0x1ffff
+      pc: 0x1a552
+      size: 0x3
+    pc_0001b380_mmio_f0000fe8:
+      access_size: 0x4
+      addr: 0xf0000fe8
+      left_shift: 0x0
+      mask: 0xf0
+      pc: 0x1b380
+      size: 0x1
+    pc_0001b8b2_mmio_4000041c:
+      access_size: 0x4
+      addr: 0x4000041c
+      left_shift: 0x0
+      mask: 0x3
+      pc: 0x1b8b2
+      size: 0x1
+  constant:
+    pc_0001a844_mmio_4000d100:
+      access_size: 0x4
+      addr: 0x4000d100
+      pc: 0x1a844
+      val: 0x0
+    pc_0001ae3e_mmio_40002158:
+      access_size: 0x4
+      addr: 0x40002158
+      pc: 0x1ae3e
+      val: 0x1
+    pc_0001ae70_mmio_40002110:
+      access_size: 0x4
+      addr: 0x40002110
+      pc: 0x1ae70
+      val: 0x0
+    pc_0001b39e_mmio_4001e400:
+      access_size: 0x4
+      addr: 0x4001e400
+      pc: 0x1b39e
+      val: 0x1
+    pc_0001b44c_mmio_10000130:
+      access_size: 0x4
+      addr: 0x10000130
+      pc: 0x1b44c
+      val: 0x6
+    pc_0001b458_mmio_10000134:
+      access_size: 0x4
+      addr: 0x10000134
+      pc: 0x1b458
+      val: 0x4
+    pc_00023d32_mmio_4000617c:
+      access_size: 0x4
+      addr: 0x4000617c
+      pc: 0x23d32
+      val: 0x0
+  passthrough:
+    pc_0001a832_mmio_4000d504:
+      access_size: 0x4
+      addr: 0x4000d504
+      init_val: 0x0
+      pc: 0x1a832
+    pc_0001ac72_mmio_50000714:
+      access_size: 0x4
+      addr: 0x50000714
+      init_val: 0x0
+      pc: 0x1ac72
+    pc_0001ac72_mmio_50000718:
+      access_size: 0x4
+      addr: 0x50000718
+      init_val: 0x0
+      pc: 0x1ac72
+    pc_0001ac72_mmio_5000071c:
+      access_size: 0x4
+      addr: 0x5000071c
+      init_val: 0x0
+      pc: 0x1ac72
+    pc_0001ac72_mmio_50000720:
+      access_size: 0x4
+      addr: 0x50000720
+      init_val: 0x0
+      pc: 0x1ac72
+    pc_0002395e_mmio_50000734:
+      access_size: 0x4
+      addr: 0x50000734
+      init_val: 0x0
+      pc: 0x2395e
+  set:
+    pc_0001a592_mmio_40000518:
+      access_size: 0x4
+      addr: 0x40000518
+      pc: 0x1a592
+      vals:
+      - 0x0
+      - 0x1
+    pc_0001a59a_mmio_40000104:
+      access_size: 0x4
+      addr: 0x40000104
+      pc: 0x1a59a
+      vals:
+      - 0x0
+      - 0x1
+    pc_0001b0b0_mmio_40011144:
+      access_size: 0x4
+      addr: 0x40011144
+      pc: 0x1b0b0
+      vals:
+      - 0x0
+      - 0x1
+    pc_0001b20e_mmio_40011304:
+      access_size: 0x4
+      addr: 0x40011304
+      pc: 0x1b20e
+      vals:
+      - 0x0
+      - 0x10000
+    pc_0001b220_mmio_40011140:
+      access_size: 0x4
+      addr: 0x40011140
+      pc: 0x1b220
+      vals:
+      - 0x0
+      - 0x1
+    pc_0001b378_mmio_f0000fe0:
+      access_size: 0x1
+      addr: 0xf0000fe0
+      pc: 0x1b378
+      vals:
+      - 0x0
+      - 0x6
+    pc_0001b59c_mmio_10001200:
+      access_size: 0x4
+      addr: 0x10001200
+      pc: 0x1b59c
+      vals:
+      - 0x0
+      - 0x15
+    pc_0001b5a4_mmio_10001204:
+      access_size: 0x4
+      addr: 0x10001204
+      pc: 0x1b5a4
+      vals:
+      - 0x0
+      - 0x15
+    pc_0001b8aa_mmio_40000414:
+      access_size: 0x4
+      addr: 0x40000414
+      pc: 0x1b8aa
+      vals:
+      - 0x0
+      - 0x1
+  unmodeled:
+    pc_000195e2_mmio_4000b504:
+      access_size: 0x4
+      addr: 0x4000b504
+      pc: 0x195e2
+    pc_0001afb4_mmio_40011504:
+      access_size: 0x4
+      addr: 0x40011504
+      pc: 0x1afb4
+    pc_0001b27c_mmio_40011144:
+      access_size: 0x4
+      addr: 0x40011144
+      pc: 0x1b27c
+    pc_0001b858_mmio_40000104:
+      access_size: 0x4
+      addr: 0x40000104
+      pc: 0x1b858
+    pc_00023f74_mmio_10000010:
+      access_size: 0x4
+      addr: 0x10000010
+      pc: 0x23f74
+    pc_00023f7c_mmio_10000014:
+      access_size: 0x4
+      addr: 0x10000014
+      pc: 0x23f7c

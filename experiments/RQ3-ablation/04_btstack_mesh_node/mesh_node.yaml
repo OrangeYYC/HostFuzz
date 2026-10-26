@@ -1,0 +1,27 @@
+fuzzer:
+  work_dir: "./fuzz"
+
+simulator:
+  transport: "uart@/tmp/ttyACM3"
+  protocol: "h4"
+  timeout: 1000
+  initial_timeout: 60000
+  legacy_scan_reports:
+  - event_type: 0
+    address_type: Public
+    address: [161, 162, 163, 164, 165, 166]
+    # Flags + Complete List of 16-bit Service UUIDs: 0x1827 (Mesh Provisioning), 0x1828 (Mesh Proxy)
+    data: [2, 1, 6, 5, 3, 39, 24, 40, 24]
+    rssi: -42
+  - event_type: 4
+    address_type: Public
+    address: [161, 162, 163, 164, 165, 166]
+    # Complete Local Name: Mesh PB-GATT
+    data: [13, 9, 77, 101, 115, 104, 32, 80, 66, 45, 71, 65, 84, 84]
+    rssi: -42
+
+executor:
+  elf_path: "./mesh_node.elf"
+  cmd_args: []
+  chroot_path: ~
+  allocate_stdio_pty: true

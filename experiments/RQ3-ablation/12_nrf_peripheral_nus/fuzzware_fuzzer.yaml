@@ -1,0 +1,28 @@
+fuzzer:
+  work_dir: "./fuzz"
+
+simulator:
+  transport: "udp-sync@127.0.0.1:6673-127.0.0.1:6672"
+  protocol: "h4"
+  timeout: 1000
+  initial_timeout: 3000
+  keep_alive_on_timeout_until_child_exit: true
+  round_timeout: 0
+
+executor:
+  harness_python: "/opt/venvs/fuzzware/bin/python"
+  modeling_python: "/opt/venvs/fuzzware-modeling/bin/python"
+  harness_module: "fuzzware_harness.harness"
+  harness_root: "/opt/fuzzware/emulator/harness"
+  harness_config: "./fuzzware_12.yml"
+  hook_module_dir: "."
+  extra_python_paths:
+    - "/opt/fuzzware/emulator/unicorn/fuzzware-unicorn/bindings/python"
+    - "/opt/fuzzware/modeling"
+  run_timeout_ms: 10000000
+  udp_timeout_ms: 1000
+  auto_modeling: true
+  model_timeout_sec: 8
+  model_max_states: 32
+  allow_nonzero_exit: true
+  env: {}

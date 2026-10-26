@@ -1,0 +1,357 @@
+memory_map:
+  rom:
+    base_addr: 0x00000000
+    size: 0x00080000
+    permissions: r-x
+    file: ./target.bin
+    is_entry: true
+  ram:
+    base_addr: 0x20000000
+    size: 0x00100000
+    permissions: rw-
+  mmio:
+    base_addr: 0x40000000
+    size: 0x20000000
+    permissions: rw-
+  nvic:
+    base_addr: 0xE0000000
+    size: 0x10000000
+    permissions: rw-
+  irq_ret:
+    base_addr: 0xFFFFF000
+    size: 0x00001000
+    permissions: --x
+  mmio_id_1:
+    base_addr: 0x10000000
+    size: 0x00002000
+    permissions: rw-
+  mmio_id_2:
+    base_addr: 0xF0000000
+    size: 0x00001000
+    permissions: rw-
+
+handlers:
+  arch_early_memset_bridge:
+    addr: 0x0001edaf
+    handler: fuzzware_hooks.arch_early_memset_bridge
+    do_return: true
+  arch_early_memcpy_bridge:
+    addr: 0x0001edb3
+    handler: fuzzware_hooks.arch_early_memcpy_bridge
+    do_return: true
+  libc_memcpy_bridge:
+    addr: 0x00023d9d
+    handler: fuzzware_hooks.libc_memcpy_bridge
+    do_return: true
+  libc_memset_bridge:
+    addr: 0x00023ded
+    handler: fuzzware_hooks.libc_memset_bridge
+    do_return: true
+  busy_wait_bridge:
+    addr: 0x000233e7
+    handler: fuzzware_hooks.busy_wait_bridge
+    do_return: true
+  arch_busy_wait_bridge:
+    addr: 0x00004595
+    handler: fuzzware_hooks.busy_wait_bridge
+    do_return: true
+  printk_noop_bridge:
+    addr: 0x0001e32d
+    handler: fuzzware_hooks.noop_bridge
+    do_return: true
+  uarte_poll_out_noop_bridge:
+    addr: 0x00019635
+    handler: fuzzware_hooks.noop_bridge
+    do_return: true
+  controller_init_reset_bridge:
+    addr: 0x0000ddb5
+    handler: fuzzware_hooks.ret0_bridge
+    do_return: true
+  controller_rx_replenish_bridge:
+    addr: 0x0000dcbd
+    handler: fuzzware_hooks.ret0_bridge
+    do_return: true
+  hci_driver_send_bridge:
+    addr: 0x0000eab9
+    handler: fuzzware_hooks.hci_driver_send_bridge
+    do_return: false
+  bt_hci_recv_bridge:
+    addr: 0x00004bf9
+    handler: fuzzware_hooks.bt_hci_recv_bridge
+    do_return: false
+  bt_hci_recv_bridge_even:
+    addr: 0x00004bf8
+    handler: fuzzware_hooks.bt_hci_recv_bridge
+    do_return: false
+  bt_recv_prio_bridge:
+    addr: 0x0000ea99
+    handler: fuzzware_hooks.bt_recv_prio_bridge
+    do_return: false
+  bt_le_adv_start_probe:
+    addr: 0x000067d5
+    handler: fuzzware_hooks.pc_probe
+    do_return: false
+  entropy_get_probe:
+    addr: 0x00019305
+    handler: fuzzware_hooks.entropy_get_bridge
+    do_return: true
+  entropy_get_isr_probe:
+    addr: 0x0001925d
+    handler: fuzzware_hooks.entropy_get_bridge
+    do_return: true
+
+limits:
+  translation_blocks: 3000000
+  fuzz_consumption_timeout: 5000000
+  interrupts: 10000
+
+mmio_models:
+  bitextract:
+    pc_0001804e_mmio_100000a8:
+      access_size: 0x4
+      addr: 0x100000a8
+      left_shift: 0x0
+      mask: 0x3fff
+      pc: 0x1804e
+      size: 0x2
+    pc_00019cb4_mmio_f0000fe8:
+      access_size: 0x4
+      addr: 0xf0000fe8
+      left_shift: 0x0
+      mask: 0xf0
+      pc: 0x19cb4
+      size: 0x1
+  constant:
+    pc_0000a0bc_mmio_4000041c:
+      access_size: 0x4
+      addr: 0x4000041c
+      pc: 0xa0bc
+      val: 0x1
+    pc_0000a0ea_mmio_40000418:
+      access_size: 0x4
+      addr: 0x40000418
+      pc: 0xa0ea
+      val: 0x10001
+    pc_0000a0ee_mmio_40000418:
+      access_size: 0x4
+      addr: 0x40000418
+      pc: 0xa0ee
+      val: 0x10001
+    pc_0000a12a_mmio_40000518:
+      access_size: 0x4
+      addr: 0x40000518
+      pc: 0xa12a
+      val: 0x1
+    pc_0000a132_mmio_40000104:
+      access_size: 0x4
+      addr: 0x40000104
+      pc: 0xa132
+      val: 0x1
+    pc_0000a3ca_mmio_4000d504:
+      access_size: 0x4
+      addr: 0x4000d504
+      pc: 0xa3ca
+      val: 0x1
+    pc_0000ebf8_mmio_4000617c:
+      access_size: 0x4
+      addr: 0x4000617c
+      pc: 0xebf8
+      val: 0x0
+    pc_000193a8_mmio_4000d100:
+      access_size: 0x4
+      addr: 0x4000d100
+      pc: 0x193a8
+      val: 0x0
+    pc_00019772_mmio_40002158:
+      access_size: 0x4
+      addr: 0x40002158
+      pc: 0x19772
+      val: 0x1
+    pc_000197a4_mmio_40002110:
+      access_size: 0x4
+      addr: 0x40002110
+      pc: 0x197a4
+      val: 0x0
+    pc_00019cac_mmio_f0000fe0:
+      access_size: 0x1
+      addr: 0xf0000fe0
+      pc: 0x19cac
+      val: 0x6
+    pc_00019cd2_mmio_4001e400:
+      access_size: 0x4
+      addr: 0x4001e400
+      pc: 0x19cd2
+      val: 0x1
+    pc_00019d80_mmio_10000130:
+      access_size: 0x4
+      addr: 0x10000130
+      pc: 0x19d80
+      val: 0x6
+    pc_00019d8c_mmio_10000134:
+      access_size: 0x4
+      addr: 0x10000134
+      pc: 0x19d8c
+      val: 0x4
+    pc_00019e76_mmio_10000130:
+      access_size: 0x4
+      addr: 0x10000130
+      pc: 0x19e76
+      val: 0x6
+    pc_00021998_mmio_40011144:
+      access_size: 0x4
+      addr: 0x40011144
+      pc: 0x21998
+      val: 0x0
+    pc_000219a8_mmio_10000130:
+      access_size: 0x4
+      addr: 0x10000130
+      pc: 0x219a8
+      val: 0x6
+  passthrough:
+    pc_000195a6_mmio_50000714:
+      access_size: 0x4
+      addr: 0x50000714
+      init_val: 0x0
+      pc: 0x195a6
+    pc_000195a6_mmio_50000718:
+      access_size: 0x4
+      addr: 0x50000718
+      init_val: 0x0
+      pc: 0x195a6
+    pc_000195a6_mmio_5000071c:
+      access_size: 0x4
+      addr: 0x5000071c
+      init_val: 0x0
+      pc: 0x195a6
+    pc_000195a6_mmio_50000720:
+      access_size: 0x4
+      addr: 0x50000720
+      init_val: 0x0
+      pc: 0x195a6
+    pc_00019cee_mmio_10000324:
+      access_size: 0x4
+      addr: 0x10000324
+      init_val: 0x0
+      pc: 0x19cee
+    pc_00019d14_mmio_10000244:
+      access_size: 0x4
+      addr: 0x10000244
+      init_val: 0x0
+      pc: 0x19d14
+    pc_00019e4c_mmio_10000258:
+      access_size: 0x4
+      addr: 0x10000258
+      init_val: 0x0
+      pc: 0x19e4c
+    pc_00019e62_mmio_40000400:
+      access_size: 0x4
+      addr: 0x40000400
+      init_val: 0x0
+      pc: 0x19e62
+    pc_00019e90_mmio_4000173c:
+      access_size: 0x4
+      addr: 0x4000173c
+      init_val: 0x0
+      pc: 0x19e90
+  set:
+    pc_0001664c_mmio_4000b140:
+      access_size: 0x4
+      addr: 0x4000b140
+      pc: 0x1664c
+      vals:
+      - 0x0
+      - 0x1
+    pc_0001801e_mmio_100000a4:
+      access_size: 0x4
+      addr: 0x100000a4
+      pc: 0x1801e
+      vals:
+      - 0x0
+      - 0xffffffff
+    pc_0001802a_mmio_100000a0:
+      access_size: 0x4
+      addr: 0x100000a0
+      pc: 0x1802a
+      vals:
+      - 0x0
+      - 0x1
+    pc_0001805e_mmio_10000090:
+      access_size: 0x4
+      addr: 0x10000090
+      pc: 0x1805e
+      vals:
+      - 0x0
+      - 0xffffffff
+    pc_00018066_mmio_10000094:
+      access_size: 0x4
+      addr: 0x10000094
+      pc: 0x18066
+      vals:
+      - 0x0
+      - 0xffffffff
+    pc_0001806e_mmio_10000098:
+      access_size: 0x4
+      addr: 0x10000098
+      pc: 0x1806e
+      vals:
+      - 0x0
+      - 0xffffffff
+    pc_00018076_mmio_1000009c:
+      access_size: 0x4
+      addr: 0x1000009c
+      pc: 0x18076
+      vals:
+      - 0x0
+      - 0xffffffff
+    pc_00019b42_mmio_40011304:
+      access_size: 0x4
+      addr: 0x40011304
+      pc: 0x19b42
+      vals:
+      - 0x0
+      - 0x10000
+    pc_00019b54_mmio_40011140:
+      access_size: 0x4
+      addr: 0x40011140
+      pc: 0x19b54
+      vals:
+      - 0x0
+      - 0x1
+    pc_00019ed0_mmio_10001200:
+      access_size: 0x4
+      addr: 0x10001200
+      pc: 0x19ed0
+      vals:
+      - 0x0
+      - 0x15
+    pc_00019ed8_mmio_10001204:
+      access_size: 0x4
+      addr: 0x10001204
+      pc: 0x19ed8
+      vals:
+      - 0x0
+      - 0x15
+    pc_0001a1de_mmio_40000414:
+      access_size: 0x4
+      addr: 0x40000414
+      pc: 0x1a1de
+      vals:
+      - 0x0
+      - 0x1
+  unmodeled:
+    pc_00018172_mmio_4000b504:
+      access_size: 0x4
+      addr: 0x4000b504
+      pc: 0x18172
+    pc_00019772_mmio_40002158:
+      access_size: 0x4
+      addr: 0x40002158
+      pc: 0x19772
+    pc_000198e8_mmio_40011504:
+      access_size: 0x4
+      addr: 0x40011504
+      pc: 0x198e8
+    pc_00019bb0_mmio_40011144:
+      access_size: 0x4
+      addr: 0x40011144
+      pc: 0x19bb0

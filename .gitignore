@@ -1,0 +1,21 @@
+# Build output (anchor these so QEMU's target/ sources are not ignored)
+/target/
+/apps/*/target/
+/apps/*/target-*/
+/deps/libafl/target/
+/deps/qemu-libafl-bridge/build/
+/deps/qemu-libafl-bridge/build.backup.*
+
+# Runtime output
+outputs/
+fuzz-*/
+telemetry/
+*.pcap
+*.log
+__pycache__/
+*.pyc
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/

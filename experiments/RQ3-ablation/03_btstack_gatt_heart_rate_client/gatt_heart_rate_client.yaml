@@ -1,0 +1,27 @@
+fuzzer:
+  work_dir: "./fuzz"
+
+simulator:
+  transport: "uart@/tmp/ttyACM2"
+  protocol: "h4"
+  timeout: 1000
+  initial_timeout: 60000
+  round_timeout: 5000
+  legacy_scan_reports:
+  - event_type: 0
+    address_type: Public
+    address: [161, 162, 163, 164, 165, 166]
+    # Flags + Complete List of 16-bit Service UUIDs: 0x180D (Heart Rate)
+    data: [2, 1, 6, 3, 3, 13, 24]
+    rssi: -40
+  - event_type: 4
+    address_type: Public
+    address: [161, 162, 163, 164, 165, 166]
+    # Complete Local Name: Heart Rate
+    data: [11, 9, 72, 101, 97, 114, 116, 32, 82, 97, 116, 101]
+    rssi: -40
+
+executor:
+  elf_path: "./gatt_heart_rate_client.elf"
+  cmd_args: []
+  chroot_path: ~

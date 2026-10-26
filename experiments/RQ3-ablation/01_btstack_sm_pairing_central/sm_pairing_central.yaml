@@ -1,0 +1,22 @@
+fuzzer:
+  work_dir: "./fuzz"
+
+simulator:
+  transport: "uart@/tmp/ttyACM0"
+  protocol: "h4"
+  timeout: 1000
+  initial_timeout: 60000
+  legacy_scan_reports:
+  - event_type: 0
+    address_type: Public
+    address: [161, 162, 163, 164, 165, 166]
+    # Flags + Incomplete List of 16-bit Service UUIDs: 0x1111
+    # data: [2, 1, 6, 3, 2, 0x1111 ]
+    data: [2, 1, 6, 3, 2, 17, 17]
+    rssi: -40
+  max_att_profile_guided_probe_steps: 0
+
+executor:
+  elf_path: "./sm_pairing_central.elf"
+  cmd_args: []
+  chroot_path: ~

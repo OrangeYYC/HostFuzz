@@ -1,0 +1,40 @@
+fuzzer:
+  work_dir: "./fuzz"
+
+simulator:
+  transport: "uart@/tmp/ttyACM1"
+  protocol: "h4"
+  timeout: 1000
+  initial_timeout: 60000
+  legacy_scan_reports:
+  - event_type: 0
+    address_type: Public
+    address: [161, 162, 163, 164, 165, 166]
+    # Flags + Complete Local Name: LE CBM Server
+    # data: [2, 1, 6, 14, 9, 'LE CBM Server' ]
+    data: [2, 1, 6, 14, 9, 76, 69, 32, 67, 66, 77, 32, 83, 101, 114, 118, 101, 114]
+    rssi: -40
+  le_credit:
+    enabled: true
+    psm: 0x25
+    mtu: 1024
+    mps: 247
+    initial_credits: 32
+    auto_open_as_client: false
+    auto_stream_after_open: true
+    stream_payload_len: 1000
+    stream_packets_per_burst: 6
+    suppress_att_interact: true
+    semantic_probe_sequence:
+    - valid_small_sdu
+    - valid_mtu_sdu
+    - credit_refill_small
+    - oversized_sdu
+    - credit_refill_burst
+    - oversized_fragment
+    - credit_overrun
+
+executor:
+  elf_path: "./le_credit_based_flow_control_mode_client.elf"
+  cmd_args: []
+  chroot_path: ~

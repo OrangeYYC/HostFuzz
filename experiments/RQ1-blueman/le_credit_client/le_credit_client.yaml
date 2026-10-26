@@ -1,0 +1,31 @@
+fuzzer:
+  work_dir: "./fuzz"
+
+simulator:
+  transport: "zephyr_ipc@sim=trial_sim,dev=0,phy=HCIIPC,mode=hci_ipc"
+  protocol: "h4"
+  timeout: 3000
+  initial_timeout: 3000
+  round_timeout: 0
+  max_acl_packets_per_round: 256
+  legacy_scan_reports:
+    - event_type: 0
+      address_type: Public
+      address: [161, 162, 163, 164, 165, 166]
+      # Flags + Complete Local Name: "LE CBM Server"
+      data: [2, 1, 6, 14, 9, 76, 69, 32, 67, 66, 77, 32, 83, 101, 114, 118, 101, 114]
+      rssi: -40
+  le_credit:
+    enabled: true
+    auto_stream_after_open: true
+    stream_payload_len: 1000
+    stream_packets_per_burst: 4
+    initial_credits: 32
+
+executor:
+  target_path: "./target.exe"
+  cmd_args: ["-v=0", "-nosim", "-s=trial_sim", "-d=0"]
+  auto_append_sim_args: false
+  run_timeout_ms: 2500
+  env: {}
+  allow_nonzero_exit: false

@@ -1,0 +1,24 @@
+[package]
+name = "simulator"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+tokio = { version = "1.48.0", features = ["full"] }
+clap = { version = "4.5.52", features = ["derive"] }
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt", "registry", "std"] }
+ble = { path = "../../crates/ble" }
+simulator = { path = "../../crates/simulator" }
+
+[workspace]
+members = ["."]
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
+lto = true
+codegen-units = 1
+opt-level = 3
+debug = true

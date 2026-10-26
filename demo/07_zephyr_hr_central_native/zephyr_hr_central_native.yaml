@@ -1,0 +1,28 @@
+# HostFuzz demo case: Zephyr heart-rate central on BabbleSim (native execution)
+# Paper mapping: RQ1 (fuzzing effectiveness) / source-instrumented backend.
+#
+# The target is a 32-bit Zephyr/BabbleSim ELF built with AFL instrumentation.
+# It speaks HCI over the Zephyr HCI-IPC FIFOs. The demo runner creates
+# /tmp/bs_root/<sim>, clears stale FIFOs, and sets USER=root so the target and
+# the simulator agree on the FIFO root.
+fuzzer:
+  work_dir: "./fuzz"
+
+simulator:
+  transport: "zephyr_ipc@sim=trial_sim,dev=0,phy=HCIIPC,mode=hci_ipc"
+  protocol: "h4"
+  timeout: 3000
+  initial_timeout: 3000
+  round_timeout: 0
+  max_acl_packets_per_round: 256
+  ablation:
+    record_telemetry: true
+    telemetry_dir: "./telemetry"
+
+executor:
+  target_path: "./target.exe"
+  cmd_args: ["-v=0", "-nosim", "-s=trial_sim", "-d=0"]
+  auto_append_sim_args: false
+  run_timeout_ms: 2500
+  env: {}
+  allow_nonzero_exit: true

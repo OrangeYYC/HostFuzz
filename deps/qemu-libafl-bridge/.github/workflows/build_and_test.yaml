@@ -1,0 +1,24 @@
+name: Build and Test QEMU
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    container: registry.gitlab.com/qemu-project/qemu/qemu/ubuntu2204:latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build QEMU
+        run: mkdir -p build && cd build && ../configure --enable-werror --disable-docs --enable-fdt=system && make -j $(expr $(nproc) + 1)

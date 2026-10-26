@@ -1,0 +1,47 @@
+fuzzer:
+  work_dir: "./fuzz"
+
+simulator:
+  transport: "udp-sync@127.0.0.1:6667-127.0.0.1:6666"
+  protocol: "h4"
+  timeout: 2500
+  initial_timeout: 60000
+  max_att_profile_guided_probe_steps: 12
+  att_semantic_probe_order: "write_first"
+  supported_states: [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+
+executor:
+  flash_path: "./gatt_server.bin"
+  efuse_path: "../common/efuse.bin"
+  pc_bios_path: "../common"
+  hooks:
+    controller:
+      esp_bt_controller_init: 0x400da018
+      esp_bt_controller_enable: 0x400da1ac
+      esp_bt_controller_get_status: 0x400da230
+      esp_bt_controller_mem_release: 0x400d9fcc
+      esp_ble_tx_power_get: 0x400da23c
+      esp_vhci_host_register_callback: 0x400d9fbc
+      esp_vhci_host_check_send_available: 0x400d9f94
+      esp_vhci_host_send_packet: 0x400d9fa0
+    sanitizer:
+      malloc_enter: 0x40094EE4
+      malloc_return: 0x40094EEE
+      pv_port_malloc_enter: 0x4008FD44
+      pv_port_malloc_return: 0x4008FD53
+      free_enter: 0x40094F04
+      v_port_free_enter: 0x4008FD58
+      calloc_enter: 0x40094F10
+      calloc_return: 0x40094F3A
+      panic_handler: 0x400D3A68
+      esp_panic_handler: 0x40141F44
+      heap_area:
+      - [0x3FFAFF10, 0x000000F0]
+      - [0x3FFB6388, 0x00001C78]
+      - [0x3FFB9A20, 0x00004108]
+      - [0x3FFC6C10, 0x000193F0]
+      - [0x3FFE0440, 0x00003AE0]
+      - [0x3FFE4350, 0x0001BCB0]
+      - [0x40097AB0, 0x00008550]
+      code_area:
+      - [0x400F7730, 0x000002F8] # l2cble_process_sig_cmd

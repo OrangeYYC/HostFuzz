@@ -1,0 +1,52 @@
+fuzzer:
+  work_dir: "./fuzz"
+
+simulator:
+  transport: "udp-sync@127.0.0.1:6667-127.0.0.1:6666"
+  protocol: "h4"
+  timeout: 2500
+  initial_timeout: 60000
+  max_att_profile_guided_probe_steps: 12
+  supported_states: [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+  peer_gatt_profile_preset: "esp_gatts_demo"
+  legacy_scan_reports:
+  - event_type: 0x00
+    address_type: "Public"
+    address: [0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6]
+    data: [0x0F, 0x09, 0x45, 0x53, 0x50, 0x5F, 0x47, 0x41, 0x54, 0x54, 0x53, 0x5F, 0x44, 0x45, 0x4D, 0x4F]
+    rssi: -46
+executor:
+  flash_path: "./gatt_client.bin"
+  efuse_path: "../common/efuse.bin"
+  pc_bios_path: "../common"
+  hooks:
+    controller:
+      esp_bt_controller_init: 0x400dcd0c
+      esp_bt_controller_enable: 0x400dcea0
+      esp_bt_controller_get_status: 0x400dcf24
+      esp_bt_controller_mem_release: 0x400dccc8
+      esp_ble_tx_power_get: 0x400dcf30
+      esp_vhci_host_register_callback: 0x400dccb8
+      esp_vhci_host_check_send_available: 0x400dcc90
+      esp_vhci_host_send_packet: 0x400dcc9c
+    sanitizer:
+      malloc_enter: 0x4008F5B8
+      malloc_return: 0x4008F5C2
+      pv_port_malloc_enter: 0x40092BC8
+      pv_port_malloc_return: 0x40092BD7
+      free_enter: 0x4008F5D8
+      v_port_free_enter: 0x40092BDC
+      calloc_enter: 0x4008F5E4
+      calloc_return: 0x4008F60E
+      panic_handler: 0x4008190C
+      esp_panic_handler: 0x4013D3D4
+      heap_area:
+      - [0x3FFAFF10, 0x000000F0]
+      - [0x3FFB6388, 0x00001C78]
+      - [0x3FFB9A20, 0x00004108]
+      - [0x3FFC6D38, 0x000192C8]
+      - [0x3FFE0440, 0x00003AE0]
+      - [0x3FFE4350, 0x0001BCB0]
+      - [0x40097800, 0x00008800]
+      code_area:
+      - [0x400F13AC, 0x0000047A] # gatt_process_read_by_type_rsp

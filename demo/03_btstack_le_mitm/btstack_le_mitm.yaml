@@ -1,0 +1,32 @@
+# HostFuzz demo case: BTstack LE MITM (BlueKitchen, user-mode QEMU)
+# Paper mapping: RQ1 (behavior coverage across 91 demos) / RQ3 (ablation).
+fuzzer:
+  work_dir: "./fuzz"
+
+simulator:
+  transport: "uart@/tmp/hostfuzz_btstack_03"
+  protocol: "h4"
+  timeout: 1200
+  initial_timeout: 60000
+  round_timeout: 5000
+  legacy_scan_reports:
+    - event_type: 0x00
+      address_type: Public
+      address: [0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6]
+      data: [0x02, 0x01, 0x06, 0x03, 0x03, 0x0D, 0x18]
+      rssi: -45
+    - event_type: 0x04
+      address_type: Public
+      address: [0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6]
+      data: [0x0A, 0x09, 0x56, 0x69, 0x72, 0x74, 0x42, 0x4C, 0x45, 0x2D, 0x50]
+      rssi: -45
+  ablation:
+    record_telemetry: true
+    telemetry_dir: "./telemetry"
+
+executor:
+  elf_path: "./target.elf"
+  cmd_args: []
+  chroot_path: ~
+  env:
+    BTSTACK_UART_DEVICE: "/tmp/hostfuzz_btstack_03"

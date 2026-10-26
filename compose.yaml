@@ -1,0 +1,27 @@
+services:
+  hostfuzz:
+    build:
+      context: .
+      target: runtime
+    image: hostfuzz:latest
+    volumes:
+      - ./outputs:/outputs
+    working_dir: /outputs
+    # Examples:
+    #   docker compose run --rm hostfuzz list
+    #   docker compose run --rm hostfuzz run --case 01_btstack_sm_pairing_central --seconds 120
+    #   docker compose run --rm hostfuzz replay --case 01_btstack_sm_pairing_central \
+    #       --input <run>/fuzz-<timestamp>/queue/<input>
+    command: ["list"]
+
+  # Full image with the Fuzzware runtime (needed for demo case 06).
+  hostfuzz-full:
+    profiles: ["full"]
+    build:
+      context: .
+      target: full
+    image: hostfuzz:full
+    volumes:
+      - ./outputs:/outputs
+    working_dir: /outputs
+    command: ["list"]

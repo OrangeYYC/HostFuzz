@@ -1,0 +1,3 @@
+[env]
+QEMU_XTENSA_COUNT_WINDOW_REGS = "1"
+LIBAFL_QEMU_DIR = { value = "./deps/qemu-libafl-bridge", relative = true, force = true }
